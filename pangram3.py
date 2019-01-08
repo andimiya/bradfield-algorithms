@@ -1,8 +1,10 @@
-import time
+# Solution 3 - O^n2 Quadratic Time
 
 # Solution where a complete alphabet array is not needed to check against
 
 # I *think* that the alphabet array would change the amount of time it takes for the computer to solve the problem, based on the order of alphabets. So tried to take that array out of the equation.
+
+import time
 
 def checkIfPangramSolutionThree(n):
   start = time.time()
@@ -15,6 +17,7 @@ def checkIfPangramSolutionThree(n):
   ## O(1) Constant operations
   removeSpaces = n.replace(' ','')
   toLowerCase = removeSpaces.lower()
+  ## toLowerCase runs a For loop + if statement so O^n2 Quadratic time
   createList = list(toLowerCase)
   sortedList = sorted(createList)
 
@@ -23,7 +26,7 @@ def checkIfPangramSolutionThree(n):
   checkIfPangram = list(set(sortedList))
 
   # Check if 26 letters. If there are no duplicates and no spaces and contained every letter, it would have to be a list of 26.
-  ## Set appears to be an O(1) Constant operation
+  ## len() and check if equals appear to be an O(1) Constant operation - 
   if (len(checkIfPangram) == 26):
     print('It is a pangram!')
     end = time.time()
