@@ -1,4 +1,4 @@
-## Solution 2 - O^2 (Quadratic) time
+## Solution 2 - O(n^2) (Quadratic) time
 
 import time
 

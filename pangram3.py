@@ -1,4 +1,4 @@
-# Solution 3 - O^n2 Quadratic Time
+# Solution 3 - O(n^2) Quadratic Time
 
 # Solution where a complete alphabet array is not needed to check against
 
