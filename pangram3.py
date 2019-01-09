@@ -19,6 +19,7 @@ def checkIfPangramSolutionThree(n):
   toLowerCase = removeSpaces.lower()
   ## toLowerCase runs a For loop + if statement so O^n2 Quadratic time
   createList = list(toLowerCase)
+  ## Sorted list O(nlogn) logarithmic time
   sortedList = sorted(createList)
 
   # Remove duplicates
