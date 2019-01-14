@@ -37,15 +37,18 @@ class Queue(object):
     # If empty, transfer the contents of stack1 to stack2 (pop from stack 1 and push into stack2)
     ## (Since you can't pop from the bottom of a stack, reverse the order of contents in the stack to be able to pop off from the top of the stack)
   def dequeue(self):
-    if not stack2.is_empty():
+    if not self.stack2.is_empty():
       return self.stack2.pop()
-    if stack2.is_empty():
-      return self.stack2.push(stack1.pop())
+    else:
+    # if self.stack2.is_empty():
+      self.stack2.push(self.stack1.pop())
+      return self.stack2.pop()
 
   def size(self):
-    return len(self.stack1.size() + len(self.stack2.size()
+    return len(self.stack1.size()) + len(self.stack2.size())
 
-# def queue(list):
-#   print(list)
+def queue(list):
+  s = Queue()
+  Queue.dequeue(list)
   
-# queue(['a','b','c','d'])
+queue(['a','b','c','d'])
