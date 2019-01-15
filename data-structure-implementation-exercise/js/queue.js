@@ -35,7 +35,7 @@ class LinkedListNode {
   }
 }
 
-class LinkedListQueue {
+class LinkedListQueue extends LinkedListNode {
   /*
    * Finish the functions below to create a queue based on a linked list. Because
    * a queue must either:
@@ -45,24 +45,54 @@ class LinkedListQueue {
    *
    * You should use a doubly linked list to ensure O(1) time enqueue and dequeue.
    */
-  constructor() {
-    // TODO
+  constructor(value, prevNode, nextNode) {
+    super(value, prevNode, nextNode);
+
+    this.length = 0;
+    this.head = null;
+    this.tail = null;
+    this.currentNode;
   }
 
+  // Add a node to the head
   enqueue(item) {
-    // TODO
+
+    const node = new LinkedListNode(item);
+    // If there is no head, create a node and make that the head
+
+    if (this.head == null) {
+      // If there is no head, there must be no tail, so assign both the head and tail to the newly created node
+      this.head = node;
+      this.tail = node;
+    }
+    else {
+      // Update head.prev to be the new node
+      // Update the next node to the value of the old head
+      // Make the new head the new node
+      this.head.prevNode = node;
+      node.nextNode = this.head;
+      this.head = node;
+    }
+    // Add to the length of the list
+    this.length++;
+  };
+
+  // Remove a node from the tail
+  dequeue(item) {
+
+    const previousFromTail = this.tail.prevNode;
+    previousFromTail = this.head;
+    previousFromTail.nextNode = null;
+
+    this.length--;
   }
 
-  dequeue() {
-    // TODO
-  }
-
-  size() {
-    // TODO
-  }
+  size(items) {
+    return this.length;
+  };
 
   is_empty() {
-    // TODO
+    return this.size() === 0;
   }
 }
 
@@ -104,7 +134,7 @@ class RingBufferQueue {
 }
 
 module.exports = {
-  QUEUE_CLASSES: [ArrayQueue],
+  QUEUE_CLASSES: [LinkedListQueue],
 
   // Add additional entries to QUEUE_CLASSES as you fill in the implementations:
   // QUEUE_CLASSES: [ArrayQueue, LinkedListQueue, RingBufferQueue],
