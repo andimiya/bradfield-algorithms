@@ -79,14 +79,21 @@ class LinkedListQueue extends LinkedListNode {
 
   // Remove a node from the tail
   dequeue(item) {
+    // Hold the value of the current tail
+    const prevTail = this.tail;
+    // Re-assign the tail to the previous node
+    this.tail = this.tail.prevNode;
+    // Re-assign the previous node of the previous tail to be null
+    prevTail.prevNode = null;
 
-    const previousFromTail = this.tail.prevNode;
-    previousFromTail = this.head;
-    previousFromTail.nextNode = null;
-
+    if (this.tail == null) {
+      this.head = null;
+    } else {
+      this.tail.nextNode = null;
+    }
     this.length--;
+    return prevTail.value;
   }
-
   size(items) {
     return this.length;
   };
@@ -134,7 +141,7 @@ class RingBufferQueue {
 }
 
 module.exports = {
-  QUEUE_CLASSES: [LinkedListQueue],
+  QUEUE_CLASSES: [RingBufferQueue],
 
   // Add additional entries to QUEUE_CLASSES as you fill in the implementations:
   // QUEUE_CLASSES: [ArrayQueue, LinkedListQueue, RingBufferQueue],
