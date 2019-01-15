@@ -38,7 +38,7 @@ def run_simulation(queue_implementation, p_enqueue=0.5, p_dequeue=0.5, duration=
     max_queue_size = 0
     queue = queue_implementation()
     msg = "New message!"
-    
+
     while True:
         now = datetime.now()
         elapsed = now - start
@@ -77,9 +77,9 @@ if __name__ == '__main__':
     prob_pairs = [(.5, .5), (.6, .4), (.49, .51)]
 
     for p_enq, p_deq in prob_pairs:
-        print('\n\033[1mBenchmarking for P(enqueue)={}, P(dequeue)={}\033[0m\n'.format(p_enq, p_deq))
+        print('\n\033[1mBenchmarking for P(enqueue)={}, P(dequeue)={}\033[0m\n'.format(
+            p_enq, p_deq))
         print('                     enqueues/sec\tdequeues/sec\tmax queue size')
         print('                     ---\t\t---\t\t---')
         for q in QUEUE_CLASSES:
             run_simulation(q, p_enq, p_deq)
-
