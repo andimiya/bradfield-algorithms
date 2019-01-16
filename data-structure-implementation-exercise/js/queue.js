@@ -35,7 +35,7 @@ class LinkedListNode {
   }
 }
 
-class LinkedListQueue extends LinkedListNode {
+class LinkedListQueue {
   /*
    * Finish the functions below to create a queue based on a linked list. Because
    * a queue must either:
@@ -45,19 +45,16 @@ class LinkedListQueue extends LinkedListNode {
    *
    * You should use a doubly linked list to ensure O(1) time enqueue and dequeue.
    */
-  constructor(value, prevNode, nextNode) {
-    super(value, prevNode, nextNode);
-
+  constructor() {
     this.length = 0;
     this.head = null;
     this.tail = null;
-    this.currentNode;
   }
 
   // Add a node to the head
   enqueue(item) {
 
-    const node = new LinkedListNode(item);
+    const node = new LinkedListNode(item, null, null);
     // If there is no head, create a node and make that the head
 
     if (this.head == null) {
@@ -69,8 +66,9 @@ class LinkedListQueue extends LinkedListNode {
       // Update head.prev to be the new node
       // Update the next node to the value of the old head
       // Make the new head the new node
-      this.head.prevNode = node;
-      node.nextNode = this.head;
+
+      this.head.prev = node;
+      node.next = this.head;
       this.head = node;
     }
     this.length++;
@@ -81,15 +79,15 @@ class LinkedListQueue extends LinkedListNode {
     // Hold the value of the current tail
     const prevTail = this.tail;
     // Re-assign the tail to the previous node
-    this.tail = this.tail.prevNode;
+    this.tail = this.tail.prev;
     // Re-assign the previous node of the previous tail to be null
-    prevTail.prevNode = null;
+    prevTail.prev = null;
 
     if (this.tail == null) {
       this.head = null;
     } else {
       // Set the next node to the tail to null
-      this.tail.nextNode = null;
+      this.tail.next = null;
     }
     this.length--;
     return prevTail.value;
@@ -102,16 +100,6 @@ class LinkedListQueue extends LinkedListNode {
     return this.size() === 0;
   }
 }
-
-// Quick tests to make sure the object is being built correctly
-// let queue = new LinkedListQueue();
-// queue.is_empty();
-// queue.enqueue(1);
-// queue.enqueue(4);
-// queue.dequeue() === 1;
-// queue.enqueue(3);
-// console.log(queue.head.nextNode.value, 'queue')
-
 
 class RingBufferQueue {
   /*
@@ -128,10 +116,7 @@ class RingBufferQueue {
    * environment, you may prefer to just resize the underlying ring buffer at
    * these times, instead.
    */
-  constructor(value, prevNode, nextNode) {
-    this.value = value;
-    this.prev = prevNode;
-    this.next = nextNode;
+  constructor() {
     this.count = 0;
     this.length = 10;  // Set a static length
     this.head = null;
@@ -139,56 +124,40 @@ class RingBufferQueue {
   }
 
   enqueue(item) {
-    if (this.count == 1) {
-      this.length = this.length * 2;
-    }
-    const node = new LinkedListNode(item);
-
+    const node = new LinkedListNode(item, null, null);
     if (this.head == null) {
       // If head is null, add the value to the head. Also assign tail to that same value
       this.head = node;
       this.tail = node;
-      this.count++;
-
     }
     else {
-      // Traverse until the next empty space is found
       let currentNode = this.head;
 
-      while (currentNode !== null) {
-        if (!currentNode.nextNode) {
-          const node = new LinkedListNode(item);
-          currentNode.nextNode = node;
-          this.count++;
-          return;
-        }
-        else {
-          // If there are no empty slots, then double the length of the object
-          this.length = this.length * 2;
-        }
+      // Traverse until the next empty space is found
+      while (currentNode.next) {
+        currentNode = currentNode.next;
       }
+      currentNode.next = node;
     }
-  };
-
-  dequeue(item) {
-    if (this.count == 1) {
+    if (this.length - this.count == 1) { // If there is only 1 space remaining, double the length of the queue
       this.length = this.length * 2;
     }
-    // Hold the value of the current tail
-    const prevTail = this.tail;
-    // Re-assign the tail to the previous node
-    this.tail = this.tail.prevNode;
-    // Re-assign the previous node of the previous tail to be null
-    prevTail.prevNode = null;
+    this.count++;
+    return;
+  };
 
+  // Remove a node from the tail
+  dequeue(item) {
     if (this.tail == null) {
-      this.head = null;
+      return null;
     } else {
-      // Set the next node to the tail to null
-      this.tail.nextNode = null;
+
+      // Set the new tail to the next value
+      this.tail = this.tail.next;
+      this.tail.prev = null;
+      this.count--;
+      return this.tail;
     }
-    this.count--;
-    return prevTail.value;
   }
 
   size(items) {
@@ -200,18 +169,17 @@ class RingBufferQueue {
   }
 }
 
-// let queue = new RingBufferQueue();
-// queue.is_empty();
-// queue.enqueue(1);
-// queue.enqueue(2);
+let queue = new RingBufferQueue();
+queue.is_empty();
+queue.enqueue(1);
+queue.enqueue(2);
+queue.dequeue() === 1;
+console.log(queue, 'queue');
 
-// queue.dequeue() === 1;
+// queue.enqueue(3);
+// queue.enqueue(4);
 
-// console.log(queue, 'queue 2');
-// console.log(queue.length, 'length');
-// console.log(queue.count, 'count');
-// // console.log(queue, 'queue 1');
-// // queue.enqueue(3);
+// queue.dequeue() === 2;
 
 module.exports = {
   QUEUE_CLASSES: [RingBufferQueue],
