@@ -138,6 +138,9 @@ class RingBufferQueue extends LinkedListNode {
   }
 
   enqueue(item) {
+    if (this.count == 1) {
+      this.length = this.length * 2;
+    }
     const node = new LinkedListNode(item);
 
     if (this.head == null) {
@@ -145,35 +148,47 @@ class RingBufferQueue extends LinkedListNode {
       this.head = node;
       this.tail = node;
       this.count++;
+
     }
     else {
       // Traverse until the next empty space is found
       let currentNode = this.head;
-      while (currentNode) {
+
+      while (currentNode !== null) {
         if (!currentNode.nextNode) {
-          currentNode = currentNode.nextNode;
-        } else {
-          //   // If there are no empty slots, then double the length of the object
+          const node = new LinkedListNode(item);
+          currentNode.nextNode = node;
+          this.count++;
+
+          return;
+        }
+        else {
+          // If there are no empty slots, then double the length of the object
           this.length = this.length * 2;
         }
       }
-      this.count++;
-      return currentNode;
     }
   };
 
   dequeue(item) {
+    if (this.count == 1) {
+      this.length = this.length * 2;
+    }
+    // Hold the value of the current tail
     const prevTail = this.tail;
+    // Re-assign the tail to the previous node
+    this.tail = this.tail.prevNode;
+    // Re-assign the previous node of the previous tail to be null
+    prevTail.prevNode = null;
+
     if (this.tail == null) {
       this.head = null;
     } else {
-      // Re-assign the tail to the next node
-      this.tail = this.tail.nextNode;
-      // Re-assign the previous node of the previous tail to be null
-      prevTail.prevNode = null;
+      // Set the next node to the tail to null
+      this.tail.nextNode = null;
     }
     this.count--;
-    return this.tail;
+    return prevTail.value;
   }
 
   size(items) {
@@ -188,13 +203,15 @@ class RingBufferQueue extends LinkedListNode {
 // let queue = new RingBufferQueue();
 // queue.is_empty();
 // queue.enqueue(1);
-// console.log(queue, 'queue 1');
 // queue.enqueue(2);
-// console.log(queue, 'queue 2');
-// console.log(this.length, 'length');
-// console.log(this.count, 'count');
+
 // queue.dequeue() === 1;
-// queue.enqueue(3);
+
+// console.log(queue, 'queue 2');
+// console.log(queue.length, 'length');
+// console.log(queue.count, 'count');
+// // console.log(queue, 'queue 1');
+// // queue.enqueue(3);
 
 module.exports = {
   QUEUE_CLASSES: [RingBufferQueue],
