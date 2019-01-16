@@ -113,7 +113,7 @@ class LinkedListQueue extends LinkedListNode {
 // console.log(queue.head.nextNode.value, 'queue')
 
 
-class RingBufferQueue extends LinkedListNode {
+class RingBufferQueue {
   /*
    * Finish the functions below such that this queue is backed by a Ring Buffer.
    * Recall that a ring buffer uses an array and two pointers to keep track of
@@ -129,8 +129,9 @@ class RingBufferQueue extends LinkedListNode {
    * these times, instead.
    */
   constructor(value, prevNode, nextNode) {
-    super(value, prevNode, nextNode);
-
+    this.value = value;
+    this.prev = prevNode;
+    this.next = nextNode;
     this.count = 0;
     this.length = 10;  // Set a static length
     this.head = null;
@@ -159,7 +160,6 @@ class RingBufferQueue extends LinkedListNode {
           const node = new LinkedListNode(item);
           currentNode.nextNode = node;
           this.count++;
-
           return;
         }
         else {
