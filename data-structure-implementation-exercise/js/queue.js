@@ -73,7 +73,6 @@ class LinkedListQueue extends LinkedListNode {
       node.nextNode = this.head;
       this.head = node;
     }
-    // Add to the length of the list
     this.length++;
   };
 
@@ -89,6 +88,7 @@ class LinkedListQueue extends LinkedListNode {
     if (this.tail == null) {
       this.head = null;
     } else {
+      // Set the next node to the tail to null
       this.tail.nextNode = null;
     }
     this.length--;
@@ -103,8 +103,17 @@ class LinkedListQueue extends LinkedListNode {
   }
 }
 
+// Quick tests to make sure the object is being built correctly
+// let queue = new LinkedListQueue();
+// queue.is_empty();
+// queue.enqueue(1);
+// queue.enqueue(4);
+// queue.dequeue() === 1;
+// queue.enqueue(3);
+// console.log(queue.head.nextNode.value, 'queue')
 
-class RingBufferQueue {
+
+class RingBufferQueue extends LinkedListNode {
   /*
    * Finish the functions below such that this queue is backed by a Ring Buffer.
    * Recall that a ring buffer uses an array and two pointers to keep track of
@@ -119,26 +128,73 @@ class RingBufferQueue {
    * environment, you may prefer to just resize the underlying ring buffer at
    * these times, instead.
    */
-  constructor() {
-    // TODO
+  constructor(value, prevNode, nextNode) {
+    super(value, prevNode, nextNode);
+
+    this.count = 0;
+    this.length = 10;  // Set a static length
+    this.head = null;
+    this.tail = null;
   }
 
   enqueue(item) {
-    // TODO
+    const node = new LinkedListNode(item);
+
+    if (this.head == null) {
+      // If head is null, add the value to the head. Also assign tail to that same value
+      this.head = node;
+      this.tail = node;
+      this.count++;
+    }
+    else {
+      // Traverse until the next empty space is found
+      let currentNode = this.head;
+      while (currentNode) {
+        if (!currentNode.nextNode) {
+          currentNode = currentNode.nextNode;
+        } else {
+          //   // If there are no empty slots, then double the length of the object
+          this.length = this.length * 2;
+        }
+      }
+      this.count++;
+      return currentNode;
+    }
+  };
+
+  dequeue(item) {
+    const prevTail = this.tail;
+    if (this.tail == null) {
+      this.head = null;
+    } else {
+      // Re-assign the tail to the next node
+      this.tail = this.tail.nextNode;
+      // Re-assign the previous node of the previous tail to be null
+      prevTail.prevNode = null;
+    }
+    this.count--;
+    return this.tail;
   }
 
-  dequeue() {
-    // TODO
-  }
-
-  size() {
-    // TODO
-  }
+  size(items) {
+    return this.length;
+  };
 
   is_empty() {
-    // TODO
+    return this.count === 0;
   }
 }
+
+// let queue = new RingBufferQueue();
+// queue.is_empty();
+// queue.enqueue(1);
+// console.log(queue, 'queue 1');
+// queue.enqueue(2);
+// console.log(queue, 'queue 2');
+// console.log(this.length, 'length');
+// console.log(this.count, 'count');
+// queue.dequeue() === 1;
+// queue.enqueue(3);
 
 module.exports = {
   QUEUE_CLASSES: [RingBufferQueue],
