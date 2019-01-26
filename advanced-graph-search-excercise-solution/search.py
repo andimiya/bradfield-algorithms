@@ -10,9 +10,13 @@ def _successors(grid, location):
     Return the set of co-ordinates that can be reached from the given location
     """
     i, j = location
+    
     return {(i+di, j+dj) for di, dj in _DELTAS
             if 0 <= i+di < len(grid) and 0 <= j+dj < len(grid[0])
             and grid[i+di][j+dj] != MOUNTAIN}
+    
+
+# _successors([['s', ' ', ' ', ' '], [' ', '^', '^', '^'], [' ', '-', '-', '-'], [' ', ' ', ' ', 'x']], (0,0))
 
 
 def _search(queue, g, h):
@@ -24,7 +28,6 @@ def _search(queue, g, h):
         frontier = queue
         frontier.add((0, 0, start, None))
         explored = {}
-        
         while not frontier.empty():
             _, cost, node, parent = frontier.pop()
 
@@ -37,6 +40,8 @@ def _search(queue, g, h):
                 return explored
             
             neighbors = _successors(grid, node)
+            print(node, 'node')
+        
             for neighbor in neighbors:
                 if neighbor not in explored:
                     step_cost = g(grid, goal, neighbor)
