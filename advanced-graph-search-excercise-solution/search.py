@@ -26,6 +26,7 @@ def _search(queue, g, h):
     """
     def inner(grid, start, goal):
         frontier = queue
+        print(frontier, 'frontier')
         frontier.add((0, 0, start, None))
         explored = {}
         while not frontier.empty():
@@ -40,7 +41,6 @@ def _search(queue, g, h):
                 return explored
             
             neighbors = _successors(grid, node)
-            print(node, 'node')
         
             for neighbor in neighbors:
                 if neighbor not in explored:
@@ -54,6 +54,7 @@ def _search(queue, g, h):
         return explored
 
     return inner
+
 
 
 def one(*args):

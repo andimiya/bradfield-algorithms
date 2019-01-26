@@ -1,4 +1,5 @@
 from constants import MOUNTAIN, COSTS
+from structures import Queue, Stack, PriorityQueue
 
 potentialDirections = ((-1, 0), (0, -1), (1, 0), (0, 1))
 
@@ -12,7 +13,6 @@ def exploreNeighbors(grid, location):
 
 exploreNeighbors([['s', ' ', ' ', ' '], [' ', '^', '^', '^'], [' ', '-', '-', '-'], [' ', ' ', ' ', 'x']], (0,0))
 
-
 # Stack
 def dfs (grid, start, goal):
   cost = 0
@@ -20,10 +20,11 @@ def dfs (grid, start, goal):
   visited = []
   visited.append(start)
   current = start
-  # frontier params: coordinate, cost
-  frontier = [(start, 0)]
+  frontier = Stack()
+  # frontier params: coordinate, start, cost
+  frontier.add((0, 0, start, None))
 
-  while not (len(frontier)) == 0: # As long as the queue is not empty, do all these things
+  while not frontier.empty(): # As long as the queue is not empty, do all these things
     if current == goal: # If goal is reached, stop
       return visited
 
@@ -40,7 +41,7 @@ def dfs (grid, start, goal):
         y = neighbor[1]
         if (grid[x][y]):
           cost += COSTS[grid[x][y]]
-          frontier.append((neighbor, cost))
+          frontier.add((neighbor, cost))
         
     return visited
   print(frontier)  
